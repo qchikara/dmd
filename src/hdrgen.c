@@ -1748,6 +1748,12 @@ void toBufferShort(Type *t, OutBuffer *buf, HdrGenState *hgs)
     v.visitWithMask(t, 0);
 }
 
+void toBufferUnmodifiedName(Type *t, OutBuffer *buf, HdrGenState *hgs)
+{
+    PrettyPrintVisitor v(buf, hgs);
+    v.visitWithMask(t, MODconst|MODimmutable|MODshared|MODwild|MODmutable);
+}
+
 void trustToBuffer(OutBuffer *buf, TRUST trust)
 {
     const char *p = trustToChars(trust);

@@ -46,6 +46,7 @@
 
 FuncDeclaration *hasThis(Scope *sc);
 void toCBuffer(Type *t, OutBuffer *buf, Identifier *ident, HdrGenState *hgs);
+void toBufferUnmodifiedName(Type *t, OutBuffer *buf, HdrGenState *hgs);
 
 #define LOGDOTEXP       0       // log ::dotExp()
 #define LOGDEFAULTINIT  0       // log ::defaultInit()
@@ -6631,7 +6632,12 @@ L1:
     }
     if (!s)
     {
-        const char *p = toChars();
+        const char *p;
+        OutBuffer idbuf;
+        HdrGenState hgs;
+        toBufferUnmodifiedName(this, &idbuf, &hgs);
+        p = idbuf.extractString();
+
         const char *n = importHint(p);
         if (n)
             error(loc, "'%s' is not defined, perhaps you need to import %s; ?", p, n);
